@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+
+      <h2>Drones</h2>
+
+      <table id="table" style="width:80%">
+          <thead>
+              <tr>
+                  <th>ID</th>
+                  <th>Latitude</th>
+                  <th>Longitude</th>
+                  <th>Speed (m/s)</th>
+                </tr>
+          </thead>
+          <tbody id="tbody">
+          </tbody>
+        </table>
+    </div>
+
+    <script>
+      let drones = [];
+      const websocket = new WebSocket("ws://localhost:8080/drones");
+
+      websocket.onopen = function(event) {
+        console.log("Successfully connected to websocket server");
+      };
+
+      websocket.onerror = function(error) {
+        console.log("Error connecting to websocket server");
+        console.log(error);
+      };
+
+      let count = 0
+
+      websocket.onmessage = function(event) {
+
+        count++
+
+
+        drones = JSON.parse(event.data);
+
+        let table = document.getElementById("tbody");
+
+        //if it's our first message, then we have to create the table
+        if (count === 1) {
+
+          drones.forEach(function(drone) {
+
+            let row = table.insertRow(table.rows.length);
+            row.id = drone.id;
+
+            if (drone.stationary == true) {
+              row.style.color='red';
+            }
+
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1);
+            let cell3 = row.insertCell(2);
+            let cell4 = row.insertCell(3);
+
+            cell1.innerHTML = drone.id;
+            cell2.innerHTML = drone.lat;
+            cell3.innerHTML = drone.lon;
+            cell4.innerHTML = drone.speed;
+
+          })
+          return
+        }
+
+      //by default update the existing table
+      drones.forEach(function(drone) {
+
+        //if not there then create
+        if (!document.getElementById(drone.id)) {
+          let row = table.insertRow(table.rows.length);
+          row.id = drone.id;
+
+
+          if (drone.stationary == true) {
+              row.style.color='red';
+            }
+
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1);
+            let cell3 = row.insertCell(2);
+            let cell4 = row.insertCell(3);
+
+            cell1.innerHTML = drone.id;
+            cell2.innerHTML = drone.lat;
+            cell3.innerHTML = drone.lon;
+            cell4.innerHTML = drone.speed;
+
+            return
+        }
+
+        let row = document.getElementById(drone.id)
+        row.cells[0].innerHTML = drone.id;
+        row.cells[1].innerHTML = drone.lat;
+        row.cells[2].innerHTML = drone.lon;
+        row.cells[3].innerHTML = drone.speed;
+
+        if (drone.stationary == true) {
+          row.style.color='red';
+        } else {
+          row.style.color='black';
+        }
+
+      }); 
+
+      };
+
+    </script>
+  </body>
+</html>

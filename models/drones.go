@@ -34,7 +34,7 @@ func (*DB) GetDrones() []*Drone {
 }
 
 //AddDrone adds drone to DroneStore
-func (*DB) AddDrone(drone *Drone) {
+func (*DB) AddDrone(drone *Drone) error {
 	droneStore[drone.ID] = drone
-	return
+	return nil
 }

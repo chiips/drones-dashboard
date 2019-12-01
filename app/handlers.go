@@ -152,10 +152,43 @@ func (s *Server) add() http.HandlerFunc {
 		submission.Speed = 0
 		submission.Stationary = true
 
-		s.DB.AddDrone(submission)
+		ctx := r.Context()
+		okCh := make(chan bool)
+		errCh := make(chan error)
 
-		fmt.Println("added")
+		go func() {
 
-		return
+			//check if context cancelled before time to talk to DB
+			if ctx.Err() != nil {
+				return
+			}
+
+			err := s.DB.AddDrone(submission)
+
+			if err != nil {
+				errCh <- err
+				return
+			}
+
+			okCh <- true
+			return
+
+		}()
+
+		select {
+		case <-ctx.Done():
+			s.Log.Errorln(ctx.Err())
+			http.Error(w, "We could not process your request at this time. Please try again later.", http.StatusRequestTimeout)
+			return
+		case err := <-errCh:
+			s.Log.Errorln("error submitting post:", err)
+			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+			return
+		case <-okCh:
+			fmt.Fprint(w, "drone added!\n")
+			return
+		}
+
 	}
+
 }

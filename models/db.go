@@ -3,7 +3,7 @@ package models
 //Datastore is our interface to work witih the DB
 type Datastore interface {
 	GetDrones() []*Drone
-	AddDrone(drone *Drone)
+	AddDrone(drone *Drone) error
 }
 
 //DB is our database type
