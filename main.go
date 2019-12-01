@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"dashboard/backend/models"
 	"dashboard/backend/app"
 	"dashboard/backend/logs"
 )
@@ -22,8 +23,10 @@ func main() {
 	//set up new router
 	router := http.NewServeMux()
 
+	db := models.NewDB()
+
 	//assign router, drone client, logger to our app's Server struct
-	s := app.Server{Router: router, Log: logger}
+	s := app.Server{Router: router, DB: db, Log: logger}
 	//init Server routes
 	s.Routes()
 

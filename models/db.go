@@ -1,34 +1,13 @@
 package models
 
-import (
-	"database/sql"
-
-	//pq is necessary for connecting with PostgreSQL
-	_ "github.com/lib/pq"
-	uuid "github.com/satori/go.uuid"
-)
-
 //Datastore is our interface to work witih the DB
 type Datastore interface {
-
-	//Drone methods
-	GetDrones() ([]*Drone, error)
-
+	GetDrones() []*Drone
+	AddDrone(drone *Drone)
 }
 
 //DB is our database type
-type DB struct {
-	*sql.DB
-}
+type DB struct{}
 
 //NewDB creates a new DB instance
-func NewDB(dbURL string) (*DB, error) {
-	db, err := sql.Open("postgres", dbURL)
-	if err != nil {
-		return nil, err
-	}
-	if err = db.Ping(); err != nil {
-		return nil, err
-	}
-	return &DB{db}, nil
-}
+func NewDB() *DB { return &DB{} }
