@@ -5,11 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
+    <link rel="stylesheet" href="main.css">
   </head>
   <body>
     <div class="container">
 
       <h2>Drones</h2>
+
+      <form class="form" id="droneForm">
+        <label for="formLat">Latitude</label>
+        <input type="number" name="formLat" id="formLat">
+        <label for="formLon">Longitude</label>
+        <input type="number" name="formLon" id="formLon">
+        <button type="submit">Add Drone</button>
+      </form>
+      
+
+      <!-- <div id="map"></div> -->
 
       <table id="table" style="width:80%">
           <thead>
@@ -26,6 +38,7 @@
     </div>
 
     <script>
+
       let drones = [];
       const websocket = new WebSocket("ws://localhost:8080/drones");
 
@@ -38,22 +51,15 @@
         console.log(error);
       };
 
-      let count = 0
-
       websocket.onmessage = function(event) {
-
-        count++
-
 
         drones = JSON.parse(event.data);
 
         let table = document.getElementById("tbody");
 
-        //if it's our first message, then we have to create the table
-        if (count === 1) {
-
-          drones.forEach(function(drone) {
-
+        drones.forEach(function(drone) {
+          let exists = document.getElementById(drone.id);
+          if (exists === null) {
             let row = table.insertRow(table.rows.length);
             row.id = drone.id;
 
@@ -71,52 +77,42 @@
             cell3.innerHTML = drone.lon;
             cell4.innerHTML = drone.speed;
 
-          })
-          return
-        }
-
-      //by default update the existing table
-      drones.forEach(function(drone) {
-
-        //if not there then create
-        if (!document.getElementById(drone.id)) {
-          let row = table.insertRow(table.rows.length);
-          row.id = drone.id;
-
+          } else {
+            let row = document.getElementById(drone.id)
+          row.cells[0].innerHTML = drone.id;
+          row.cells[1].innerHTML = drone.lat;
+          row.cells[2].innerHTML = drone.lon;
+          row.cells[3].innerHTML = drone.speed;
 
           if (drone.stationary == true) {
-              row.style.color='red';
-            }
-
-            let cell1 = row.insertCell(0);
-            let cell2 = row.insertCell(1);
-            let cell3 = row.insertCell(2);
-            let cell4 = row.insertCell(3);
-
-            cell1.innerHTML = drone.id;
-            cell2.innerHTML = drone.lat;
-            cell3.innerHTML = drone.lon;
-            cell4.innerHTML = drone.speed;
-
-            return
+            row.style.color='red';
+          } else {
+            row.style.color='black';
+          }
         }
 
-        let row = document.getElementById(drone.id)
-        row.cells[0].innerHTML = drone.id;
-        row.cells[1].innerHTML = drone.lat;
-        row.cells[2].innerHTML = drone.lon;
-        row.cells[3].innerHTML = drone.speed;
-
-        if (drone.stationary == true) {
-          row.style.color='red';
-        } else {
-          row.style.color='black';
-        }
-
-      }); 
-
+        });
       };
 
+      //add drone
+      const droneForm = document.getElementById("droneForm");
+
+      droneForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        let lat = parseFloat(document.getElementById("formLat").value);
+        let lon = parseFloat(document.getElementById("formLon").value);
+
+        fetch("/add", {
+          method: "POST",
+          body: JSON.stringify({"lat": lat, "lon": lon})
+        })
+        .then((response) => console.log(response.status))
+
+      })
+
+
     </script>
+    <script src="https://maps.googleapis.com/maps/api/js?&callback=initMap" async defer></script>
   </body>
 </html>
