@@ -9,10 +9,10 @@ import (
 )
 
 //Approximate coordinates of Canadian border limits
-var maxLat = 83.1424
-var minLat = 42.0967
-var maxLon = -52.8805
-var minLon = -141.2985
+var maxLat = 43.9955
+var minLat = 42.7841
+var maxLon = -80.5873
+var minLon = -78.7681
 
 const updateTime = 10
 

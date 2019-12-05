@@ -1,9 +1,24 @@
 html, body { height: 100%; margin: 0; padding: 0; }
-#map {height: 10rem;}
+#map {
+    height: 100%;
+  }
 #table{
     margin: 0 auto;
     width: 75%;
 }
 #droneForm{
-    width:100%
+    width: 100%;
+    margin: 5px;
+}
+
+.form-control {
+    margin-bottom: 1rem;
+}
+
+.btn {
+    margin-bottom: 1rem;
+}
+
+.map-col {
+    height:50rem;
 }

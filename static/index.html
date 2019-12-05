@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-    <link rel="stylesheet" href="main.css">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <div class="container">
+    <div class="container-fluid">
 
       <h2 class="text-center">Drone Dashboard</h2>
       <br>
-
+      
       <form class="form-inline text-center" id="droneForm">
 
             <!-- <label for="formLat">Latitude</label> -->
@@ -35,119 +36,42 @@
       <p id="success" class="text-center" style="display:none">Drone added! Waiting for update...</p>
       <p id="error" class="text-center" style="display:none">Error occurred. Please refresh the page and try again.</p>
 
-      <!-- <div id="map"></div> -->
       <hr>
 
-      <table id="table" class="table table-striped">
-          <thead>
-              <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Latitude</th>
-                  <th scope="col">Longitude</th>
-                  <th scope="col">Speed (m/s)</th>
-                </tr>
-          </thead>
-          <tbody id="tbody">
-          </tbody>
-        </table>
+      <div class="container">
+        <div class="row">
+
+          <div class="col-md-6 col-sm-12 map-col">
+          
+              <div id="map"></div>
+                
+          </div>
+
+          <div class="col-md-6 col-sm-12">
+            
+            <!-- table -->
+            <table id="table" class="table table-striped text-center">
+              <thead>
+                  <tr>
+                      <th scope="col" class="text-center">ID</th>
+                      <th scope="col" class="text-center">Latitude</th>
+                      <th scope="col" class="text-center">Longitude</th>
+                      <th scope="col" class="text-center">Speed (m/s)</th>
+                    </tr>
+              </thead>
+              <tbody id="tbody">
+              </tbody>
+            </table>
+
+          </div>
+
+        </div>
+      </div>
+
     </div>
 
-    <script>
+    <script src="main.js"></script>
 
-      //for toggling results
-      let success = document.getElementById("success");
-      let error = document.getElementById("error");
-
-      let drones = [];
-      const websocket = new WebSocket("ws://localhost:8080/drones");
-
-      websocket.onopen = function(event) {
-        console.log("Successfully connected to websocket server");
-      };
-
-      websocket.onerror = function(error) {
-        console.log("Error connecting to websocket server");
-        console.log(error);
-      };
-
-      websocket.onmessage = function(event) {
-
-        drones = JSON.parse(event.data);
-
-        let table = document.getElementById("tbody");
-
-        drones.forEach(function(drone) {
-          let exists = document.getElementById(drone.id);
-          if (exists === null) {
-            let row = table.insertRow(table.rows.length);
-            row.id = drone.id;
-
-            if (drone.stationary == true) {
-              row.style.color='red';
-            }
-
-            let cell1 = row.insertCell(0);
-            let cell2 = row.insertCell(1);
-            let cell3 = row.insertCell(2);
-            let cell4 = row.insertCell(3);
-
-            cell1.innerHTML = drone.id;
-            cell2.innerHTML = drone.lat;
-            cell3.innerHTML = drone.lon;
-            cell4.innerHTML = drone.speed;
-
-          } else {
-            let row = document.getElementById(drone.id)
-          row.cells[0].innerHTML = drone.id;
-          row.cells[1].innerHTML = drone.lat;
-          row.cells[2].innerHTML = drone.lon;
-          row.cells[3].innerHTML = drone.speed;
-
-          if (drone.stationary == true) {
-            row.style.color='red';
-          } else {
-            row.style.color='black';
-          }
-        }
-
-        });
-
-        success.style.display = "none"
-
-      };
-
-      //add drone
-      const droneForm = document.getElementById("droneForm");
-
-      droneForm.addEventListener("submit", function(e) {
-        e.preventDefault();
-
-        //reset error message if visible
-        error.style.display="none";
-
-        let formLat = document.getElementById("formLat");
-        let formLon = document.getElementById("formLon");
-
-        let lat = parseFloat(formLat.value);
-        let lon = parseFloat(formLon.value);
-
-        fetch("/add", {
-          method: "POST",
-          body: JSON.stringify({"lat": lat, "lon": lon})
-        })
-        .then(() => {
-          this.formLat.value = "";
-          this.formLon.value = "";
-          success.style.display = "block";
-        })
-        .catch(() => {
-          error.style.display="block";
-        })
-
-      })
-
-
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCszsbQyuy6-j9SS-tAFLET9R3ortjx3vw&callback=initMap" async defer></script>
   </body>
 </html>
