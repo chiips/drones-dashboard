@@ -6,9 +6,9 @@ import (
 	"os"
 	"time"
 
-	"dashboard/backend/app"
-	"dashboard/backend/logs"
-	"dashboard/backend/models"
+	"drones-dashboard/app"
+	"drones-dashboard/logs"
+	"drones-dashboard/models"
 )
 
 func main() {

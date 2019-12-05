@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"dashboard/backend/models"
-	"dashboard/backend/websock"
+	"drones-dashboard/models"
+	"drones-dashboard/websock"
 
 	"github.com/gorilla/websocket"
 	uuid "github.com/satori/go.uuid"

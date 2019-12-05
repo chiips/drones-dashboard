@@ -1,4 +1,4 @@
-module dashboard/backend
+module drones-dashboard
 
 go 1.13
 

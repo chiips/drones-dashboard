@@ -3,8 +3,8 @@ package app
 import (
 	"net/http"
 
-	"dashboard/backend/logs"
-	"dashboard/backend/models"
+	"drones-dashboard/logs"
+	"drones-dashboard/models"
 )
 
 //Server struct to include our dependencies
