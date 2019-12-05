@@ -32,6 +32,8 @@
 
       </form>
       
+      <p id="success" class="text-center" style="display:none">Drone added! Waiting for update...</p>
+      <p id="error" class="text-center" style="display:none">Error occurred. Please refresh the page and try again.</p>
 
       <!-- <div id="map"></div> -->
       <hr>
@@ -51,6 +53,10 @@
     </div>
 
     <script>
+
+      //for toggling results
+      let success = document.getElementById("success");
+      let error = document.getElementById("error");
 
       let drones = [];
       const websocket = new WebSocket("ws://localhost:8080/drones");
@@ -105,6 +111,9 @@
         }
 
         });
+
+        success.style.display = "none"
+
       };
 
       //add drone
@@ -113,8 +122,11 @@
       droneForm.addEventListener("submit", function(e) {
         e.preventDefault();
 
-        let formLat = document.getElementById("formLat")
-        let formLon = document.getElementById("formLon")
+        //reset error message if visible
+        error.style.display="none";
+
+        let formLat = document.getElementById("formLat");
+        let formLon = document.getElementById("formLon");
 
         let lat = parseFloat(formLat.value);
         let lon = parseFloat(formLon.value);
@@ -126,6 +138,10 @@
         .then(() => {
           this.formLat.value = "";
           this.formLon.value = "";
+          success.style.display = "block";
+        })
+        .catch(() => {
+          error.style.display="block";
         })
 
       })
