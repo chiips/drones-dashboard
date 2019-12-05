@@ -1,2 +1,9 @@
 html, body { height: 100%; margin: 0; padding: 0; }
 #map {height: 10rem;}
+#table{
+    margin: 0 auto;
+    width: 75%;
+}
+#droneForm{
+    width:100%
+}

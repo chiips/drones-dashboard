@@ -6,30 +6,43 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
   </head>
   <body>
     <div class="container">
 
-      <h2>Drones</h2>
+      <h2 class="text-center">Drone Dashboard</h2>
+      <br>
 
-      <form class="form" id="droneForm">
-        <label for="formLat">Latitude</label>
-        <input type="number" name="formLat" id="formLat">
-        <label for="formLon">Longitude</label>
-        <input type="number" name="formLon" id="formLon">
-        <button type="submit">Add Drone</button>
+      <form class="form-inline text-center" id="droneForm">
+
+            <!-- <label for="formLat">Latitude</label> -->
+            <input type="number" name="formLat" id="formLat" class="form-control" placeholder="Latitude">
+      
+
+            <!-- <label for="formLon">Longitude</label> -->
+            <input type="number" name="formLon" id="formLon" class="form-control" placeholder="Longitude">
+       
+
+            <button type="submit" class="btn btn-primary">Add Drone</button>
+     
+
+
+        </div>
+
       </form>
       
 
       <!-- <div id="map"></div> -->
+      <hr>
 
-      <table id="table" style="width:80%">
+      <table id="table" class="table table-striped">
           <thead>
               <tr>
-                  <th>ID</th>
-                  <th>Latitude</th>
-                  <th>Longitude</th>
-                  <th>Speed (m/s)</th>
+                  <th scope="col">ID</th>
+                  <th scope="col">Latitude</th>
+                  <th scope="col">Longitude</th>
+                  <th scope="col">Speed (m/s)</th>
                 </tr>
           </thead>
           <tbody id="tbody">
@@ -100,14 +113,20 @@
       droneForm.addEventListener("submit", function(e) {
         e.preventDefault();
 
-        let lat = parseFloat(document.getElementById("formLat").value);
-        let lon = parseFloat(document.getElementById("formLon").value);
+        let formLat = document.getElementById("formLat")
+        let formLon = document.getElementById("formLon")
+
+        let lat = parseFloat(formLat.value);
+        let lon = parseFloat(formLon.value);
 
         fetch("/add", {
           method: "POST",
           body: JSON.stringify({"lat": lat, "lon": lon})
         })
-        .then((response) => console.log(response.status))
+        .then(() => {
+          this.formLat.value = "";
+          this.formLon.value = "";
+        })
 
       })
 
