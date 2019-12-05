@@ -41,6 +41,9 @@ func (s *Server) drones() http.HandlerFunc {
 		//make a channel to send and receive errors
 		errCh := make(chan error)
 
+		//set update time
+		updateTime := 5
+
 		//go run this anonymous function in an independent thread
 		go func() {
 
@@ -61,8 +64,8 @@ func (s *Server) drones() http.HandlerFunc {
 					return
 				}
 
-				// create a new ticker that ticks every 10 seconds
-				ticker := time.NewTicker(10 * time.Second)
+				// create a new ticker that ticks every 5 seconds
+				ticker := time.NewTicker(time.Duration(updateTime) * time.Second)
 
 				// every time our ticker ticks
 				for range ticker.C {

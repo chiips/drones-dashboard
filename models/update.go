@@ -14,7 +14,7 @@ var minLat = 42.7841
 var maxLon = -80.5873
 var minLon = -78.7681
 
-const updateTime = 10
+const updateTime = 5
 
 func init() {
 
@@ -22,7 +22,7 @@ func init() {
 	r := rand.New(s)
 
 	//create five drones
-	for i := 1; i <= 5; i++ {
+	for i := 1; i <= 3; i++ {
 
 		id := uuid.NewV4()
 
@@ -47,8 +47,8 @@ func init() {
 //every 10 seconds, as long as the program runs, the function will update the position of each drone
 func update() {
 	for {
-		// we create a new ticker that ticks every 10 seconds
-		ticker := time.NewTicker(10 * time.Second)
+		// we create a new ticker that ticks according to update time
+		ticker := time.NewTicker(time.Duration(updateTime) * time.Second)
 
 		s := rand.NewSource(time.Now().UnixNano())
 		r := rand.New(s)
