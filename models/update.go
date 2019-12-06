@@ -8,7 +8,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-//Approximate coordinates of Canadian border limits
+//Approximate coordinates for GTA
 var maxLat = 43.9955
 var minLat = 42.7841
 var maxLon = -80.5873

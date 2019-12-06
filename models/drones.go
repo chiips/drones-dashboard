@@ -16,12 +16,6 @@ type Drone struct {
 //droneMap will serve as our in-memory storage
 var droneStore = make(map[uuid.UUID]*Drone)
 
-//OneDrone returns one drone for checking if exists in database
-func (*DB) OneDrone(id uuid.UUID) (*Drone, bool) {
-	drone, ok := droneStore[id]
-	return drone, ok
-}
-
 //GetDrones sends basic drone data
 func (*DB) GetDrones() []*Drone {
 	result := []*Drone{}
