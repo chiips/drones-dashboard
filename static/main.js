@@ -3,7 +3,7 @@
       let error = document.getElementById("error");
 
       let drones = [];
-      const websocket = new WebSocket("ws://localhost:8080/drones");
+      const websocket = new WebSocket(`ws://${window.location.host}/drones`);
 
       websocket.onopen = function(event) {
         console.log("Successfully connected to websocket server");
