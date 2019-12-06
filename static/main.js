@@ -55,16 +55,15 @@
           }
 
             //add a marker for each drone
-            let droneLatlng = new this.google.maps.LatLng(drone.lat, drone.lon);
+            let droneLatlng = new google.maps.LatLng(drone.lat, drone.lon);
 
-            let marker = new this.google.maps.Marker({
+            let marker = new google.maps.Marker({
                 position: droneLatlng,
                 title: drone.id 
             });
 
             // To add the marker to the map, call setMap();
             marker.setMap(map);
-            console.log("map update")
 
         });
 
