@@ -43,7 +43,7 @@ func main() {
 	}
 
 	//listen
-	s.Log.Infoln("Listening on:", port)
+	s.Log.Infoln("Listening on", port)
 	s.Log.Fatalln(srv.ListenAndServe())
 
 }
