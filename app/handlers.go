@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"drones-dashboard/models"
@@ -146,12 +147,6 @@ func (s *Server) add() http.HandlerFunc {
 
 		//create uuid for post
 		submission.ID = uuid.NewV4()
-		// if err != nil {
-		// 	s.Log.Errorln(err)
-		// 	http.Error(w, http.StatusText(500), http.StatusInternalServerError)
-		// 	return
-		// }
-
 		submission.Speed = 0
 		submission.Stationary = true
 
@@ -194,4 +189,68 @@ func (s *Server) add() http.HandlerFunc {
 
 	}
 
+}
+
+func (s *Server) delete() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		if r.Method != http.MethodDelete {
+			http.Error(w, http.StatusText(400), http.StatusBadRequest)
+			return
+		}
+
+		query, ok := r.URL.Query()["id"]
+
+		if !ok || len(query[0]) <= 1 || strings.TrimSpace(query[0]) == "" {
+			s.Log.Errorln("no id param")
+			http.Error(w, http.StatusText(400), http.StatusBadRequest)
+			return
+		}
+
+		id, err := uuid.FromString(query[0])
+		if err != nil {
+			s.Log.Errorln(err)
+			http.Error(w, http.StatusText(400), http.StatusBadRequest)
+			return
+		}
+
+		okCh := make(chan bool)
+		errCh := make(chan error)
+
+		ctx := r.Context()
+
+		go func() {
+
+			//check if context cancelled before time to talk to DB
+			if ctx.Err() != nil {
+				return
+			}
+
+			err = s.DB.DeleteDrone(id)
+
+			if err != nil {
+				errCh <- err
+				return
+			}
+
+			okCh <- true
+			return
+
+		}()
+
+		select {
+		case <-ctx.Done():
+			s.Log.Errorln(ctx.Err())
+			http.Error(w, "We could not process your request at this time. Please try again later.", http.StatusRequestTimeout)
+			return
+		case err := <-errCh:
+			s.Log.Errorln("error deleting drone:", err)
+			http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+			return
+		case <-okCh:
+			fmt.Fprint(w, "drone deleted!")
+			return
+		}
+
+	}
 }

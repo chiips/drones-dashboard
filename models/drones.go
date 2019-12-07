@@ -32,3 +32,9 @@ func (*DB) AddDrone(drone *Drone) error {
 	droneStore[drone.ID] = drone
 	return nil
 }
+
+//DeleteDrone removes drone from map
+func (*DB) DeleteDrone(id uuid.UUID) error {
+	delete(droneStore, id)
+	return nil
+}

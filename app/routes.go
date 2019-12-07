@@ -12,5 +12,6 @@ func (s *Server) Routes() {
 
 	s.Router.HandleFunc("/drones", s.drones())
 	s.Router.HandleFunc("/add", s.add())
+	s.Router.HandleFunc("/delete", s.delete())
 
 }
