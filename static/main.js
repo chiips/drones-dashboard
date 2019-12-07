@@ -20,6 +20,12 @@
 
         let table = document.getElementById("tbody");
 
+        //on every update clear all existing markers for full refresh
+        for (let i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+        }
+        markers = [];
+
         drones.forEach(function(drone) {
           let exists = document.getElementById(drone.id);
           if (exists === null) {
@@ -59,16 +65,17 @@
 
             let marker = new google.maps.Marker({
                 position: droneLatlng,
-                title: drone.id 
+                title: drone.id,
             });
 
-            // To add the marker to the map, call setMap();
+            //add marker to array
+            markers.push(marker);
+            //add the marker to the map
             marker.setMap(map);
 
         });
 
         success.style.display = "none"
-
 
       };
 
@@ -102,6 +109,8 @@
 
       })
 
+      let markers = []; //array to hold markers for removing when needed
+
       //add map
       let map;
       function initMap() {
@@ -110,5 +119,6 @@
           zoom: 8
         });
       }
+
 
 
