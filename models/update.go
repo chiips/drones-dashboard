@@ -50,18 +50,19 @@ func update() {
 		// we create a new ticker that ticks according to update time
 		ticker := time.NewTicker(time.Duration(updateTime) * time.Second)
 
-		s := rand.NewSource(time.Now().UnixNano())
-		r := rand.New(s)
-
 		// every time our ticker ticks
 		for range ticker.C {
+
+			s := rand.NewSource(time.Now().UnixNano())
+			r := rand.New(s)
+
 			//move each drone
 			for _, drone := range droneStore {
 
 				latChange := 0 + r.Float64()*(0.0010-0)
 				lonChange := 0 + r.Float64()*(0.0010-0)
 
-				change := r.Intn(1)
+				change := r.Intn(2)
 
 				oldLat := drone.Lat
 				oldLon := drone.Lon
