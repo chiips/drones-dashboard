@@ -1,6 +1,6 @@
 # Drone Dashboard
 
-This project is a live dashboard for tracking the activity of drones. Sample drones are created on start, and visitors can add new drones, specifying their starting coordinates, which will then began to travel on their own. A map presents the location of the drones and the table present each drone's details: ID, latitude, longitude, speed, and stationary status. The rows of stationary drones will be highlighted red.
+This project is a live dashboard for tracking the activity of drones. Sample drones are created on start, and visitors can add new drones, specifying their starting coordinates, which will then begin to travel on their own. A map presents the location of the drones, and a table presents each drone's details: ID, latitude, longitude, speed, and stationary status. The rows of stationary drones will be highlighted red.
 
 ## Backend
 
