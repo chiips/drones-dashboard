@@ -8,7 +8,7 @@ The backend is built on Go, uses websockets for regular updates to the frontend,
 
 ## Frontend
 
-The frontend is built on HTML5, the Bootstrap CSS Framework, and Javascript, and uses websockets to receive updates from the backend.
+The frontend is built on HTML5, the Bootstrap CSS Framework, Javascript, and the Google Maps Javascript API, and uses websockets to receive updates from the backend.
 
 ## Licence
 
